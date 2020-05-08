@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(userRouter);
 app.use(menuRouter);
 app.use(taskRouter);
+app.get("/", (req, res) => {res.send("Hi!")})
 
 const port = process.env.PORT || 3000
 
