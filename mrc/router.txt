@@ -1,0 +1,15 @@
+const express = require('express')
+const auth = require('../middleware/auth')
+const %MRC%Controller = require('../controllers/%mrc%s.controller');
+const router = new express.Router()
+
+router.get('/%mrc%s', auth, %MRC%Controller.getAll)
+router.get('/%mrc%s/:id', auth, %MRC%Controller.getOne)
+
+router.post('/%mrc%s', %MRC%Controller.post)
+
+router.patch('/%mrc%s/:id', auth, %MRC%Controller.patch)
+
+router.delete('/%mrc%s/:id', auth, %MRC%Controller.delete)
+
+module.exports = router

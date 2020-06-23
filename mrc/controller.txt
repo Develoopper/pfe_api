@@ -1,0 +1,21 @@
+const %MRC% = require("../models/%mrc%.model");
+
+exports.getAll = async (req, res) => {
+
+}
+
+exports.getOne = async (req, res) => {
+
+}
+
+exports.post = async (req, res) => {
+
+}
+
+exports.patch = async (req, res) => {
+
+}
+
+exports.delete = async (req, res) => {
+
+}

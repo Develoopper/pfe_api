@@ -1,0 +1,25 @@
+const mongoose = require('mongoose')
+
+const %mrc%Schema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+}, { timestamps: true })
+
+%mrc%Schema.pre('save', async function (next) {
+    const %mrc% = this
+
+    next();
+})
+
+%mrc%Schema.pre('remove', async function (next) {
+    const %mrc% = this
+
+    next();
+})
+
+const %MRC% = mongoose.model('%mrc%', %mrc%Schema)
+
+module.exports = %MRC%
