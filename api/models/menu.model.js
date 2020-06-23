@@ -30,10 +30,15 @@ const menuSchema = new mongoose.Schema({
     duree: {
         type: Number,
         required: true,
-    },
-
+    }
 }, {
     timestamps: true
+})
+
+menuSchema.pre('remove', async function (next) {
+    const menu = this
+    await Tasks.remove({ owner: require.menu._id })
+    next();
 })
 
 const Menu = mongoose.model('menu', menuSchema)

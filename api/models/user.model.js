@@ -2,48 +2,45 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Tasks = require('./tasks');
+const Menu = require('./menu.model');
 
 const userSchema = new mongoose.Schema({
-    name: {
+    tel: {
         type: String,
         required: true,
-        trim: true
+        unique: true,
+        minlength: 10,
+        maxlength: 10,
     },
-    age: {
-        type: Number,
-        required: true,
-        validate(value) {
-            if (value < 0) {
-                throw new Error('Age must be positive number')
-            }
-        },
-        default: 0
-    },
-    email: {
-        type: String,
-        required: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error('Email is in valid')
-            }
-        },
-        trim: true
+    email: { 
+        type: String, 
+        required: true, 
+        unique: true, 
+        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
     password: {
         type: String,
         required: true,
         minlength: 5
     },
-    tokens: [{
-        token: {
-            type: String,
-            required: true
-        }
-    }],
+    // tokens: [{
+    //     token: {
+    //         type: String,
+    //         required: true
+    //     }
+    // }],
+    token: {
+        type: String,
+        required: true
+    },
     avatar: {
         type: String
-    }
+    },
+    commandes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'commandes'
+    }],
+    favoris: [Menu.schema]
 }, {
     timestamps: true
 })
@@ -57,13 +54,13 @@ userSchema.virtual('tasks', {
 userSchema.methods.toJSON = function () {
     const user = this.toObject()
     delete user.password
-    delete user.tokens
+    delete user.token
     return user;
 }
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = await jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse')
+    const token = await jwt.sign({ _id: user._id.toString() }, 'tokenKey')
     return token;
 }
 
@@ -99,6 +96,17 @@ userSchema.pre('remove', async function (next) {
     next();
 })
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('user', userSchema)
 
 module.exports = User
+
+// email: {
+//     type: String,
+//     required: true,
+//     validate(value) {
+//         if (!validator.isEmail(value)) {
+//             throw new Error('Email is in valid')
+//         }
+//     },
+//     trim: true
+// },
